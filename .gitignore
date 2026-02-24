@@ -1,0 +1,9 @@
+node_modules/
+dist/
+out/
+build/
+*.dmg
+*.app
+*.zip
+.DS_Store
+Thumbs.db
