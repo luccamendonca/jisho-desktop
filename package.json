@@ -26,44 +26,22 @@
     "productName": "Jisho",
     "publish": "github",
     "mac": {
+      "icon": "image/icon.icns",
       "category": "public.app-category.reference",
       "darkModeSupport": true,
       "target": [
-        {
-          "target": "dmg",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
-        },
-        {
-          "target": "zip",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
-        }
+        "dmg",
+        "zip"
       ]
     },
     "dmg": {
       "title": "Jisho"
     },
     "win": {
+      "icon": "image/icon.ico",
       "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
-        },
-        {
-          "target": "zip",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
-        }
+        "nsis",
+        "zip"
       ]
     },
     "nsis": {
@@ -72,28 +50,11 @@
       "allowToChangeInstallationDirectory": false
     },
     "linux": {
+      "icon": "image/icon.png",
       "target": [
-        {
-          "target": "AppImage",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
-        },
-        {
-          "target": "deb",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
-        },
-        {
-          "target": "tar.gz",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
-        }
+        "AppImage",
+        "deb",
+        "tar.gz"
       ],
       "category": "Education"
     }
