@@ -12,7 +12,10 @@
     "release": "electron-builder --publish always",
     "postinstall": "electron-builder install-app-deps"
   },
-  "author": "",
+  "author": {
+    "name": "Lucca Mendonça",
+    "email": "lucca.mendonca@gmail.com"
+  },
   "license": "MIT",
   "devDependencies": {
     "electron": "^33.2.1",
