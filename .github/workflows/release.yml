@@ -14,17 +14,25 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # macOS builds (arm64 + x64 are built on arm64 runner via universal arch list)
+          # macOS arm64 (Apple Silicon)
           - os: macos-latest
             platform: mac
+            arch: arm64
+
+          # macOS x64 (Intel)
+          - os: macos-13
+            platform: mac
+            arch: x64
 
           # Windows builds (x64 + arm64)
           - os: windows-latest
             platform: win
+            arch: ""
 
           # Linux builds (x64 + arm64)
           - os: ubuntu-latest
             platform: linux
+            arch: ""
 
     runs-on: ${{ matrix.os }}
 
@@ -38,10 +46,17 @@ jobs:
           node-version: 22
           cache: npm
 
+      - name: Set version from tag
+        shell: bash
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "Setting version to $VERSION"
+          npm version "$VERSION" --no-git-tag-version
+
       - name: Install dependencies
         run: npm ci
 
-      - name: Build & Publish (${{ matrix.platform }})
+      - name: Build & Publish (${{ matrix.platform }} ${{ matrix.arch }})
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx electron-builder --${{ matrix.platform }} --publish always
+        run: npx electron-builder --${{ matrix.platform }} ${{ matrix.arch && format('--arch {0}', matrix.arch) }} --publish always
