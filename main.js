@@ -1,4 +1,4 @@
-const { app, BrowserWindow, shell, globalShortcut } = require("electron");
+const { app, BrowserWindow, shell, globalShortcut, Menu, clipboard } = require("electron");
 const path = require("path");
 
 const isMac = process.platform === "darwin";
@@ -64,6 +64,74 @@ app.setName("Jisho");
 
 app.whenReady().then(() => {
   createWindow();
+
+  const menu = Menu.buildFromTemplate([
+    ...(isMac ? [{
+      label: app.name,
+      submenu: [
+        { role: "about" },
+        { type: "separator" },
+        { role: "services" },
+        { type: "separator" },
+        { role: "hide" },
+        { role: "hideOthers" },
+        { role: "unhide" },
+        { type: "separator" },
+        { role: "quit" },
+      ],
+    }] : []),
+    {
+      label: "Edit",
+      submenu: [
+        { role: "undo" },
+        { role: "redo" },
+        { type: "separator" },
+        { role: "cut" },
+        { role: "copy" },
+        { role: "paste" },
+        { role: "selectAll" },
+      ],
+    },
+    {
+      label: "View",
+      submenu: [
+        { role: "reload" },
+        { role: "forceReload" },
+        { type: "separator" },
+        { role: "resetZoom" },
+        { role: "zoomIn" },
+        { role: "zoomOut" },
+        { type: "separator" },
+        { role: "togglefullscreen" },
+      ],
+    },
+    {
+      label: "Go",
+      submenu: [
+        {
+          label: "Copy URL",
+          accelerator: "CmdOrCtrl+Shift+C",
+          click() {
+            if (mainWindow) {
+              const url = mainWindow.webContents.getURL();
+              clipboard.writeText(url);
+              mainWindow.webContents.send("url-copied");
+            }
+          },
+        },
+      ],
+    },
+    {
+      label: "Window",
+      submenu: [
+        { role: "minimize" },
+        { role: "zoom" },
+        ...(isMac ? [{ type: "separator" }, { role: "front" }] : [{ role: "close" }]),
+      ],
+    },
+  ]);
+
+  Menu.setApplicationMenu(menu);
 
   // macOS: re-create window when clicking the dock icon
   app.on("activate", () => {

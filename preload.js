@@ -1,4 +1,4 @@
-const { contextBridge } = require("electron");
+const { contextBridge, ipcRenderer } = require("electron");
 
 window.addEventListener("DOMContentLoaded", () => {
   const isMac = navigator.platform.toUpperCase().includes("MAC");
@@ -23,6 +23,36 @@ window.addEventListener("DOMContentLoaded", () => {
     `;
     document.head.appendChild(style);
   }
+
+  ipcRenderer.on("url-copied", () => {
+    const existing = document.getElementById("__jisho_toast__");
+    if (existing) existing.remove();
+
+    const toast = document.createElement("div");
+    toast.id = "__jisho_toast__";
+    toast.textContent = "URL copied to clipboard";
+    toast.style.cssText = `
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.75);
+      color: #fff;
+      font-size: 13px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      padding: 8px 16px;
+      border-radius: 8px;
+      z-index: 999999;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    `;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+      toast.style.opacity = "0";
+      setTimeout(() => toast.remove(), 400);
+    }, 1500);
+  });
 
   // Focus the search bar on initial load
   const focusSearchBar = () => {
